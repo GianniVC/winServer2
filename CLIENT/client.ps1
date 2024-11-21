@@ -1,7 +1,7 @@
 
 
 Write-Output "Client script started"
-Write-Output "Set IP Address / dns Server"
+Write-Output "Set dns Server"
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "192.168.24.10"
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet 2" -ServerAddresses "192.168.24.10"
 Write-Output "Done"

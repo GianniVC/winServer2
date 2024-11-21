@@ -35,9 +35,9 @@ Vagrant.configure("2") do |config|
       # VirtualBox Group
       vb.customize ["modifyvm", :id, "--groups", "/WS2"]
       # 1GB vRAM
-      vb.memory = "1024"
+      vb.memory = "2048"
       # 1vCPU
-      vb.cpus = "1"
+      vb.cpus = "2"
     end
   end
 
@@ -49,8 +49,8 @@ Vagrant.configure("2") do |config|
     server2.vm.provider "virtualbox" do |vb|
       vb.name = "server2"
       vb.customize ["modifyvm", :id, "--groups", "/WS2"]
-      vb.memory = "1024"
-      vb.cpus = "1"
+      vb.memory = "4096"
+      vb.cpus = "2"
      vb.customize ["storageattach", :id, "--storagectl", "IDE Controller",
                   "--port", "1", "--device", "0", "--type", "dvddrive",
                   "--medium", "/home/giannivancauwenberge/HOGENT24_25/winServer2/en_sql_server_2019_standard_x64_dvd_814b57aa.iso"]
@@ -64,9 +64,8 @@ Vagrant.configure("2") do |config|
       Write-Output "ISO mounted successfully at $isoPath"
     } else {
       Write-Output "ISO did not mount correctly, please check VirtualBox settings."
-    }  
-  
-  SHELL
+    } 
+      SHELL
   end
 
   # Client
@@ -86,4 +85,5 @@ Vagrant.configure("2") do |config|
   # Verwijder dan het #-teken voor de onderstaande regel om de timeout te verhogen - indien nodig kan je de waarde nog aanpassen (default is 300 seconden)
   # config.vm.boot_timeout = 600
 end
+
   

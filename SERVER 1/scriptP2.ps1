@@ -32,12 +32,12 @@ Set-DnsClientServerAddress -InterfaceAlias 'Ethernet 2' -ServerAddresses ('192.1
 Write-Output 'Removing any existing zone for server1...'
 Remove-DnsServerZone "WS2-2425-gianni.hogent" -Force 
 
-# Create a new forward lookup zone
+# Create a new forward lookup zone and reverse lookup zone
 Write-Output 'Creating a new forward lookup zone for the domain 'WS2-2425-gianni.hogent'...'
 Add-DnsServerPrimaryZone -Name 'WS2-2425-gianni.hogent' -ReplicationScope 'Forest' -PassThru
 Add-DnsServerPrimaryZone -NetworkID "192.168.24.0/24" -ReplicationScope "Forest" -PassThru
 
-Remove-DnsServerResourceRecord -name "server1" -Zonename "WS2-2425-gianni.hogent" -RRType A
+Remove-DnsServerResourceRecord -name "server1" -Zonename "WS2-2425-gianni.hogent" -RRType A -Force
 
 # Check the DNS zones
 # Write-Output 'Checking the DNS zones...'
@@ -47,16 +47,10 @@ Remove-DnsServerResourceRecord -name "server1" -Zonename "WS2-2425-gianni.hogent
 # Write-Output 'Checking the DNS records for the zone 'WS2-2425-gianni.hogent'...'
 # Get-DnsServerResourceRecord -ZoneName 'WS2-2425-gianni.hogent'
 
-# Create a reverse lookup zone
-#Write-Output 'Creating a reverse lookup zone for the network 192.168.24.0/24...'
-#Add-DnsServerPrimaryZone -NetworkId '192.168.24.0/24' -ReplicationScope 'Domain'
-
 # Add A records to the forward lookup zone
 Write-Output 'Adding A records for server1 and server2 to the forward lookup zone...'
 Add-DnsServerResourceRecordA -Name 'server1' -ZoneName 'WS2-2425-gianni.hogent' -IPv4Address '192.168.24.10'
 Add-DnsServerResourceRecordA -Name 'server2' -ZoneName 'WS2-2425-gianni.hogent' -IPv4Address '192.168.24.11'
-
-
 
 # Add PTR records to the reverse lookup zone
 Write-Output 'Adding PTR records for server1 and server2 to the reverse lookup zone...'
@@ -67,18 +61,15 @@ Add-DnsServerResourceRecordPtr -Name '11' -ZoneName '24.168.192.in-addr.arpa' -P
 # Enable secure zone transfers
 Write-Output 'Enabling secure zone transfers for the primary DNS server...'
 Set-DnsServerPrimaryZone -name "WS2-2425-gianni.hogent" -SecureSecondaries "TransferToZoneNameServer" -PassThru
-
-
-# Add a client subnet and zone transfer policy
-Write-Output 'Adding a client subnet and zone transfer policy...'
-Add-DnsServerClientSubnet -Name 'AllowedSubnet' -IPv4Subnet 192.168.24.0/24 -PassThru
-Add-DnsServerZoneTransferPolicy -Name 'AllowedZoneTransfers' -Action IGNORE -ClientSubnet 'AllowedSubnet'
-
+Set-DnsServerPrimaryZone -name "24.168.192.in-addr.arpa" -SecureSecondaries "TransferToZoneNameServer" -PassThru
 
 # Add NS records
 Write-Output 'Adding NS records for the domain 'WS2-2425-gianni.hogent'...'
 dnscmd localhost /RecordAdd WS2-2425-gianni.hogent '@' NS server1.WS2-2425-gianni.hogent
 dnscmd server1.WS2-2425-gianni.hogent /RecordAdd WS2-2425-gianni.hogent '@' NS server2.WS2-2425-gianni.hogent
+
+dnscmd localhost /RecordAdd 24.168.192.in-addr.arpa '@' NS server1.WS2-2425-gianni.hogent
+dnscmd server1.WS2-2425-gianni.hogent /RecordAdd 24.168.192.in-addr.arpa '@' NS server2.WS2-2425-gianni.hogent
 
 # Check the NS records
 Write-Output 'Checking the NS records for the zone 'WS2-2425-gianni.hogent'...'
@@ -119,7 +110,6 @@ Set-DhcpServerv4OptionValue -ScopeId 192.168.24.0 -OptionId 015 -Value 'WS2-2425
 # Authorize the DHCP server in Active Directory
 Write-Output 'Authorizing the DHCP server in Active Directory...'
 Add-DhcpServerInDC
-Get-DhcpServerInDC
 
 # Install the Active Directory Certificate Services (AD CS) roles
 Write-Output 'Installing the Active Directory Certificate Services (AD CS) roles...'

@@ -6,10 +6,6 @@ New-NetIPAddress -InterfaceAlias 'Ethernet 2' -AddressFamily IPv4 -IPAddress 192
 Copy-Item -Path  C:\vagrant -Destination C:\Users\vagrant -Recurse -Force
 
 
-# Disable the firewall
-Write-Output 'Disabling the firewall for all profiles...'
-Set-NetFirewallProfile -Profile Domain, Private, Public -Enabled False
-
 # Install the Active Directory Domain Services (AD DS) and DNS roles
 Write-Output 'Installing the Active Directory Domain Services (AD DS) and DNS roles...'
 Install-WindowsFeature -Name AD-Domain-Services, DNS -IncludeManagementTools
