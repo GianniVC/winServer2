@@ -10,11 +10,6 @@ Get-WindowsFeature -Name *DNS*
 Write-Host "Installing the DNS role and management tools."
 Add-WindowsFeature -Name DNS -IncludeManagementTools
 
-Write-Host "Setting DNS server address to 192.168.24.10 for interfaces  'Ethernet' en Ethernet 2."
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "192.168.24.10"
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet 2" -ServerAddresses "192.168.24.10"
-
-
 # Configureer de secundaire server om de zones van  de primaire server te repliceren
 Write-Host "Configuring the secondary DNS zone 'WS2-2425-gianni.hogent' to replicate from the primary server."
 Add-DnsServerSecondaryZone -Name "WS2-2425-gianni.hogent" -ZoneFile "WS2-2425-gianni.hogent.dns" -MasterServers "192.168.24.10"

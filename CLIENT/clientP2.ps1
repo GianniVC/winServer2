@@ -1,3 +1,6 @@
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ResetServerAddresses | Out-Null
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet 2" -ResetServerAddresses | Out-Null
+
 Write-Output "install RSAT TOOLS"
 
 Write-Output "Install DHCP Server Tools"

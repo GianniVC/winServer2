@@ -10,8 +10,7 @@
     Server 2 -> DNS, MS SQL Server
     Client -> RSAT-tools (for DNS, DHCP, AD en CA) , SQL Server Management Studio
 #### Een netwerkdiagram voorzien van een korte uitleg
-![alt text](image.png)
-
+![alt text](image-1.png)
 ### tabel met IP-adressen en DNS-informatie
 |  | Server 1 | Server 2 |Client |
 |----------|----------|--------|-------|
@@ -139,14 +138,10 @@ Ik heb te veel tijd verloren met het zoeken naar de juiste commando's. Dit komt 
 
 
 Overzicht van gebruikers en hun wachtwoorden die gebruikt kunnen worden om (na uitrollen) jouw oplossing te testen.
-
-gebruikers:
-
-gianni -> wachtwoord: GJPL04052003@
-
-Administrator -> wachtwoord: vagrant
-
-database: sa -> wachtwoord: 123Vagrant@"
-
-
+| Username | password |Service |
+|----------|----------|--------|
+| gianni    | GJPL04052003@  | AD-user |
+| Administrator     |  vagrant  |AD-user  |
+| vagrant   | vagrant | user
+| sa   | 123Vagrant@ |database
 
